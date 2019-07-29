@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 // 连接数据库 如果不自己创建 默认test数据库会自动生成
 // var dbOptions = {'user':'zangzhihong','pass':'zang2238668'};
 // mongoose.connect('mongodb://123.56.216.109:27017/blog',dbOptions);
-// mongoose.connect('mongodb://localhost:27017/blog');
+mongoose.connect('mongodb://localhost:27017/blog',{ useNewUrlParser: true });
 
-mongoose.connect('mongodb://123.56.216.109:27017/blog');
+// mongoose.connect('mongodb://123.56.216.109:27017/blog');
 // 为这次连接绑定事件
 const db = mongoose.connection; //链接事件
 db.once('error', () => console.log('Mongo connection error'));
@@ -27,5 +27,4 @@ db.once('open', () => console.log('Mongo connection successed'));
 //    ,
 // }
 
-
-module.exports = mongoose
+module.exports= mongoose
