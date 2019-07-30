@@ -16,7 +16,16 @@ const photo = require('./routes/photo')
 const music = require('./routes/music')
 const article = require('./routes/article')
 /* 路由模块 */
-
+app.use(async (ctx, next)=> {
+  ctx.set('Access-Control-Allow-Origin', '*');
+  ctx.set('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+  if (ctx.method == 'OPTIONS') {
+    ctx.body = 200; 
+  } else {
+    await next();
+  }
+});
 // compress data
 app.use(compress({
   filter: function (content_type) { //只有在请求的content-type中有gzip类型，我们才会考虑压缩，因为zlib是压缩成gzip类型的

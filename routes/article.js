@@ -3,9 +3,6 @@ const router = require('koa-router')()
 const uploadOne=require('../utils/upload')
 const Article = require('../moudle/Article.js')
 
-const fs = require('fs');
-const path = require('path');
-const media = path.join(__dirname, '../public/images')
 
 router.prefix('/api');
 router.post('/articleimg', async (ctx, next) => {
