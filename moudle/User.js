@@ -10,11 +10,21 @@ const loginSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    time: { type: Date, default: Date.now },
-    headimg: String,
+    time: {
+        type: Date,
+        default: Date.now
+    },
+    headimg: String,/*头像 */
     adminname: String,
-    visittimes: { type: Number, default: 1 }
+    logintimes: {/* 登录次数 */
+        type: Number,
+        default: 0
+    },
+    registertime: {/* 注册时间 */
+        type: Date,
+        default: Date.now
+    }
 }, {
-        collection: "login"
-    })
+    collection: "login"
+})
 module.exports = User = mongoose.model('login', loginSchema)

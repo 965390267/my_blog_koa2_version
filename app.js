@@ -8,10 +8,14 @@ const logger = require('koa-logger')
 const koaBody=require('koa-body');//文件上传中间件
 const compress = require('koa-compress'); //压缩
 const koajwt = require('koa-jwt');
-// const index = require('./routes/index')
+/* 路由模块 */
+const weiyu = require('./routes/weiyu')
 const users = require('./routes/users')
-const login = require('./routes/login')
-
+const system = require('./routes/system')
+const photo = require('./routes/photo')
+const music = require('./routes/music')
+const article = require('./routes/article')
+/* 路由模块 */
 
 // compress data
 app.use(compress({
@@ -34,7 +38,7 @@ onerror(app)
 app.use(koaBody({
   multipart: true,
   formidable: {
-      maxFileSize: 200*1024*1024    // 设置上传文件大小最大限制，默认2M
+      maxFileSize: 2000*1024*1024    // 设置上传文件大小最大限制，默认2M
   }
 }));
 
@@ -66,10 +70,12 @@ app.use(koajwt({
 
 // routes
 // app.use(index.routes(), index.allowedMethods())
+app.use(weiyu.routes(), weiyu.allowedMethods());
+app.use(photo.routes(), photo.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
-
-app.use(login.routes(),login.allowedMethods());
-
+app.use(article.routes(), article.allowedMethods());
+app.use(music.routes(),music.allowedMethods());
+app.use(system.routes(),system.allowedMethods());
 
 
 app.use(async(ctx, next)=>{

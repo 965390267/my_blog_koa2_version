@@ -1,4 +1,4 @@
-import mongoose from './index'
+const mongoose = require('./index')
 /************** 定义登录Schema **************/
 const weiyuSchema = new mongoose.Schema({
     weiyu: String,
@@ -6,4 +6,4 @@ const weiyuSchema = new mongoose.Schema({
     headimg:String,
     timenumber: Number
 }, { collection: 'weiyu' })
-module.exports={weiyu: mongoose.model('weiyu', weiyuSchema)}
+module.exports=Weiyu= mongoose.model('weiyu', weiyuSchema)

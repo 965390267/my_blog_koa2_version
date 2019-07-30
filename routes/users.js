@@ -4,16 +4,6 @@ const crypto = require('crypto')
 const User = require('../moudle/User.js')
 const validateRegister = require('../validation/register')
 
-router.get('/test',async ctx=>{
-
-  console.log(  ctx.state.user);
-  
-  ctx.body={
-    msg:'6666'
-  }
-})
-
-
 router.post('/login', async ctx => {
   let {
     username,
@@ -28,21 +18,25 @@ router.post('/login', async ctx => {
     ctx.status = 404;
     ctx.body = {
       msg: '用户不存在',
-      success: true,
-      code: 200,
+      success: false,
+      code: 404,
       data: {}
     }
   } else {
-
+ 
     let md5 = crypto.createHash('md5');
     //3 digest([encoding])方法计算数据的hash摘要值，encoding是可选参数，不传则返回buff
     let en_data_passwd = md5.update(password).digest('hex');
     if (findUserResult[0].password == en_data_passwd) {/* y验证通过 */
-      const user = {
+     
+      let loginTimes=findUserResult[0].logintimes;
+      loginTimes++;
+      await  User.findByIdAndUpdate(findUserResult[0]._id,{logintimes:loginTimes,time:new Date()});/* 统计登录次数 */
+      const user = {/* jwt生成必须参数 */
         username,
         en_data_passwd
       }
-      let token = jwt.sign(user, 'secret', {
+      let token = jwt.sign(user, 'secret', {/* 生成token */
         expiresIn: '48h'
       })
 
@@ -51,20 +45,14 @@ router.post('/login', async ctx => {
         msg: '验证通过',
         success: true,
         code: 200,
-        data: { token: "Bearer " + token }
+        data: { token: "Bearer " + token}
       }
-      // jwt.verify(token, 'secret', (err, res) => {
-      //   //console.log(JSON.stringify(err));
-      //   console.log(res);
-
-
-      // })
     } else {
       ctx.status = 404;
       ctx.body = {
         msg: '密码错误',
-        success: true,
-        code: 200,
+        success: false,
+        code: 404,
         data: {}
       }
     }
@@ -82,15 +70,14 @@ router.post('/register', async ctx => {
     return ctx.body = errors
   }
   let { username, password } = ctx.request.body;
-  const findUserResult = await User.findOne({ username: username });
-console.log(findUserResult);
+  const findUserResult = await User.find({ username: username });
 
-  if (findUserResult) {
+  if (findUserResult.length>0) {
     ctx.status = 404;
     ctx.body = {
       msg: '用户名已存在',
-      success: true,
-      code: 200,
+      success: false,
+      code: 404,
       data: {}
     }
   } else {
@@ -101,19 +88,20 @@ console.log(findUserResult);
     const newUser = new User({
       username: ctx.request.body.username,
       password: en_data_passwd,
+      registertime:new Date()
     })
     await newUser.save().then(user => {
       ctx.body = {
         msg: '注册成功',
         success: true,
         code: 200,
-        data: user
+        data: {}
       }
     }).catch(err => {
       ctx.body = {
         msg: '注册失败',
-        success: true,
-        code: 400,
+        success: false,
+        code: 404,
         data: err
       }
     })

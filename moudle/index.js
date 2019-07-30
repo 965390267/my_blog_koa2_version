@@ -3,19 +3,16 @@
 const mongoose = require('mongoose');
 // 连接数据库 如果不自己创建 默认test数据库会自动生成
 // var dbOptions = {'user':'zangzhihong','pass':'zang2238668'};
-// mongoose.connect('mongodb://123.56.216.109:27017/blog',dbOptions);
-mongoose.connect('mongodb://localhost:27017/blog',{ useNewUrlParser: true });
+ mongoose.connect('mongodb://47.97.123.194/blog',{ useNewUrlParser: true });
+//mongoose.connect('mongodb://localhost:27017/blog',{ useNewUrlParser: true });
 
 // mongoose.connect('mongodb://123.56.216.109:27017/blog');
+mongoose.set('useFindAndModify', false);
 // 为这次连接绑定事件
 const db = mongoose.connection; //链接事件
 db.once('error', () => console.log('Mongo connection error'));
 db.once('open', () => console.log('Mongo connection successed'));
 /************** 定义模式loginSchema **************/
-// const adminSchema = new mongoose.Schema({//底部备案信息模型
-//     recordid: String, 
-// }, { collection: 'admin' })
-
 // const commentSchema = new mongoose.Schema({
 //     tourist: String,
 //     content: String,

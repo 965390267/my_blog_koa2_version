@@ -1,8 +1,8 @@
-import mongoose from './index'
+const mongoose = require('./index')
 /************** 定义登录Schema **************/
 const photoSchema = new mongoose.Schema({
     imgpath: String
 }, {
     collection: 'photolist'
 })
-module.exports={ photo: mongoose.model('photo', photoSchema)}
+module.exports=Photo=mongoose.model('photo', photoSchema)
