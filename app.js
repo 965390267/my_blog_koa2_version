@@ -41,7 +41,6 @@ app.use(async(ctx, next) => {
   await next();
 });
 
-
 // error handler
 onerror(app)
 app.use(koaBody({
@@ -74,7 +73,7 @@ app.use(async (ctx, next) => {
 app.use(koajwt({
   secret: 'secret'
 }).unless({
-   path: [/\/register/, /\/login/]
+   path: [/\/register/, /\/login/,/\/client/]
 }));
 
 // routes
@@ -85,6 +84,7 @@ app.use(users.routes(), users.allowedMethods());
 app.use(article.routes(), article.allowedMethods());
 app.use(music.routes(),music.allowedMethods());
 app.use(system.routes(),system.allowedMethods());
+
 
 
 app.use(async(ctx, next)=>{

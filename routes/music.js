@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const media = path.join(__dirname, '../public/music')
 router.prefix('/api');
-router.get('/music', async ctx => {
+router.get('/client/music', async ctx => {
     let p= new Promise(function(resolve,reject){
         fs.readdir(media, (err, musicnames) => {   
             if (err) {

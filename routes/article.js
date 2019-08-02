@@ -9,7 +9,7 @@ router.post('/articleimg', async (ctx, next) => {
     uploadOne(ctx,'articleimg')
 })
 
-router.post('/viewarticlenums', async ctx => {//文章观看次数提交获取窗口
+router.post('/client/viewarticlenums', async ctx => {//文章观看次数提交获取窗口
     let getid=ctx.request.body.artid;
     let result= await Article.findById(getid)
     if(result){
@@ -26,7 +26,7 @@ router.post('/viewarticlenums', async ctx => {//文章观看次数提交获取�
     }
 })
 
-router.post('/getarticle', async ctx=> { //获取文章的接口             
+router.post('/client/getarticle', async ctx=> { //获取文章的接口             
     let pageSize =ctx.request.body.pageSize; //一页多少条
     let currentPage = ctx.request.body.currentPage;  //当前第几页
     let skipnum = (currentPage - 1) * pageSize;   //跳过数
@@ -44,7 +44,7 @@ router.post('/getarticle', async ctx=> { //获取文章的接口
     }
 })
 
-router.get('/getarticlemostnew', async ctx => { //获取最新6篇文章的接口
+router.get('/client/getarticlemostnew', async ctx => { //获取最新6篇文章的接口
   
     let result= await Article.find().limit(6).sort({ submittime: -1 })
     if(result){
@@ -54,7 +54,7 @@ router.get('/getarticlemostnew', async ctx => { //获取最新6篇文章的接�
     }
 })
 
-router.get('/getarticlemosthot', async ctx => { //获取最热，观看次数最多的6篇文章的接口
+router.get('/client/getarticlemosthot', async ctx => { //获取最热，观看次数最多的6篇文章的接口
     let result= await Article.find().limit(6).sort({ visitnumber: -1 })
     if(result){
        ctx.body={code:200,success:true,msg:'获取最热文章成功信息',data:result}
@@ -64,7 +64,7 @@ router.get('/getarticlemosthot', async ctx => { //获取最热，观看次数最
 })
 
 
-router.post('/getarticlenext', async ctx=> { //获取下一篇文章的接口
+router.post('/client/getarticlenext', async ctx=> { //获取下一篇文章的接口
     let currenttime = ctx.request.body.time;
     let result= await Article.find({time: { $lt: currenttime } }).limit(1).sort({ time: -1 })
     if(result){
@@ -74,7 +74,7 @@ router.post('/getarticlenext', async ctx=> { //获取下一篇文章的接口
     }
 })
 
-router.post('/getarticlelast', async ctx=> { //获取上一篇文章的接口
+router.post('/client/getarticlelast', async ctx=> { //获取上一篇文章的接口
     let currenttime = ctx.request.body.time;
     let result= await Article.find({time: { $gt: currenttime } }).limit(1).sort({ time:1 })
     if(result){
@@ -85,7 +85,7 @@ router.post('/getarticlelast', async ctx=> { //获取上一篇文章的接口
 })
 
 
-router.get('/getarticlenums', async ctx=> { //获取文章的总篇数接口
+router.get('/client/getarticlenums', async ctx=> { //获取文章的总篇数接口
     let countResult= await Article.count()
     if(countResult){
         ctx.body={code:200,success:true,msg:'获取文章成功信息', data:countResult}
@@ -94,7 +94,7 @@ router.get('/getarticlenums', async ctx=> { //获取文章的总篇数接口
     }
 })
 
-router.post('/getarticlebyid',async ctx=> { //通过ID获取文章的接口
+router.post('/client/getarticlebyid',async ctx=> { //通过ID获取文章的接口
     let id=ctx.request.body.id; 
     let result= await Article.findById(id);
     if(result){
@@ -104,7 +104,7 @@ router.post('/getarticlebyid',async ctx=> { //通过ID获取文章的接口
     }
 })
 
-router.get('/getarticlefile',async ctx => { //获取文章存档的接口,采用MongoDB的聚合操作对数据进行统计,使用方法—根据_id的值查找相关的数量统计给num_s
+router.get('/client/getarticlefile',async ctx => { //获取文章存档的接口,采用MongoDB的聚合操作对数据进行统计,使用方法—根据_id的值查找相关的数量统计给num_s
     let result= await Article.aggregate([{ $group: { _id: "$submityearandmonth",num_s: { $sum: 1 } } }])
    if(result){
     ctx.body={code:200,success:true,msg:'获取文章存档成功信息', data:result}
@@ -114,7 +114,7 @@ router.get('/getarticlefile',async ctx => { //获取文章存档的接口,采用
   
 })
 
-router.get('/getaboutarticle',async ctx => { //获取文章相关文档的接口
+router.get('/client/getaboutarticle',async ctx => { //获取文章相关文档的接口
     let result= await Article.aggregate([{ $group: { _id: "$submityearandmonth",abouts:{$push:"$title"},aboutsid:{$push:"$_id"} } }])
     if(result){
         ctx.body={code:200,success:true,msg:'获取文章存档成功信息', data:result}
@@ -123,7 +123,7 @@ router.get('/getaboutarticle',async ctx => { //获取文章相关文档的接口
        }
 })
 
-router.get('/getarticleclass',async ctx => { //获取文章分类的接口
+router.get('/client/getarticleclass',async ctx => { //获取文章分类的接口
     let result= await Article.aggregate([{ $group: { _id: "$title", num_s: { $sum: 1 } } }])
     if(result){
         ctx.body={code:200,success:true,msg:'获取文章分类成功', data:result}
@@ -132,7 +132,7 @@ router.get('/getarticleclass',async ctx => { //获取文章分类的接口
        }
 })
 
-router.get('/getarticletag',async ctx => { //获取文章标签的接口
+router.get('/client/getarticletag',async ctx => { //获取文章标签的接口
     let result= await Article.aggregate([{ $group: { _id: "$tag",num_s:{$sum:1}}}])
     if(result){
         ctx.body={code:200,success:true,msg:'获取文章标签成功', data:result}
@@ -171,7 +171,7 @@ router.post('/createarticle',async ctx => { //发送文章的接口
 });
 
 
-router.post('/putlikenums',async ctx=> { //文章给赞数量统计的接口,先通过id找到文章，然后在通过回复的id找到相应的回复内容，不能直接通过回复id找到内层对象
+router.post('/client/putlikenums',async ctx=> { //文章给赞数量统计的接口,先通过id找到文章，然后在通过回复的id找到相应的回复内容，不能直接通过回复id找到内层对象
     let article_id = ctx.request.body.id;
     let recieve_id = ctx.request.body.recieveid;
     let dbindex = ctx.request.body.dbindex;
@@ -191,7 +191,7 @@ router.post('/putlikenums',async ctx=> { //文章给赞数量统计的接口,先
     }
 })
 
-router.get('/getarticlenewcomments',async ctx => { //获取文章最新评论的接口
+router.get('/client/getarticlenewcomments',async ctx => { //获取文章最新评论的接口
     let method = ctx.method.toUpperCase();
     let proxy_url = 'http://changyan.sohu.com/api/2/topic/comments?client_id=cytMXY367&topic_id=5014934906';
     let options = {

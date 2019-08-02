@@ -20,7 +20,7 @@ router.post('/postweiyu',async ctx=> {
     }
 })
 
-router.get('/getweiyu', async ctx=> { //获取微语的接口
+router.get('/client/getweiyu', async ctx=> { //获取微语的接口
    let result=await Weiyu.find().sort({ timenumber: -1 });
    if(result){
     ctx.body={code:200,success:true,msg:'微语获取成功',data:result};
@@ -29,7 +29,7 @@ router.get('/getweiyu', async ctx=> { //获取微语的接口
    }
 });
 
-router.get('/getthreeweiyu', async ctx => { //获取3条微语的接口
+router.get('/client/getthreeweiyu', async ctx => { //获取3条微语的接口
 
     let result=await Weiyu.find().limit(3).sort({ timenumber: -1 })
     if(result){

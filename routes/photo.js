@@ -7,7 +7,7 @@ const media = path.join(__dirname, '../public/images')
 
 router.prefix('/api');
 
-router.get('/photo', async (ctx, next) => {
+router.get('/client/photo', async (ctx, next) => {
     let p= new Promise(function(resolve,reject){
         fs.readdir(media, (err, musicnames) => {   
             if (err) {

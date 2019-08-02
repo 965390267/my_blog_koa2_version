@@ -2,14 +2,14 @@ const router = require('koa-router')()
 const Admin=require('../moudle/System.js')
 
 router.prefix('/api');
-router.get('/systemmessage', async ctx => { //浏览器信息
+router.get('client/systemmessage', async ctx => { //浏览器信息
  
     let agent=ctx.headers["user-agent"];
      ctx.body={code:200,success:true,msg:'浏览器信息',data:{'agent':agent,'loginip':ctx.ip,'hostname':ctx.host}};// 浏览器信息
 
 
 });
-router.get('/recordid', async ctx => { //获取底部备案信息
+router.get('/client/recordid', async ctx => { //获取底部备案信息
    let result= await Admin.findOne({
        recordid:ctx.request.body.recordmes    
    })
