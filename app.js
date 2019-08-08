@@ -15,6 +15,7 @@ const system = require('./routes/system')
 const photo = require('./routes/photo')
 const music = require('./routes/music')
 const article = require('./routes/article')
+const qiniuToken = require('./routes/qiniuToken')
 /* 路由模块 */
 app.use(async (ctx, next)=> {
   ctx.set('Access-Control-Allow-Origin', '*');
@@ -84,6 +85,7 @@ app.use(users.routes(), users.allowedMethods());
 app.use(article.routes(), article.allowedMethods());
 app.use(music.routes(),music.allowedMethods());
 app.use(system.routes(),system.allowedMethods());
+app.use(qiniuToken.routes(),qiniuToken.allowedMethods());
 
 
 
