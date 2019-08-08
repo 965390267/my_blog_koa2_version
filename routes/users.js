@@ -23,15 +23,15 @@ router.post('/login', async ctx => {
       data: {}
     }
   } else {
- 
+
     let md5 = crypto.createHash('md5');
     //3 digest([encoding])方法计算数据的hash摘要值，encoding是可选参数，不传则返回buff
     let en_data_passwd = md5.update(password).digest('hex');
     if (findUserResult[0].password == en_data_passwd) {/* y验证通过 */
-     
-      let loginTimes=findUserResult[0].logintimes;
+
+      let loginTimes = findUserResult[0].logintimes;
       loginTimes++;
-      await  User.findByIdAndUpdate(findUserResult[0]._id,{logintimes:loginTimes,time:new Date()});/* 统计登录次数 */
+      await User.findByIdAndUpdate(findUserResult[0]._id, { logintimes: loginTimes, time: new Date() });/* 统计登录次数 */
       const user = {/* jwt生成必须参数 */
         username,
         en_data_passwd
@@ -45,7 +45,7 @@ router.post('/login', async ctx => {
         msg: '验证通过',
         success: true,
         code: 200,
-        data: { token: "Bearer " + token}
+        data: { token: "Bearer " + token }
       }
     } else {
       ctx.status = 404;
@@ -72,7 +72,7 @@ router.post('/register', async ctx => {
   let { username, password } = ctx.request.body;
   const findUserResult = await User.find({ username: username });
 
-  if (findUserResult.length>0) {
+  if (findUserResult.length > 0) {
     ctx.status = 404;
     ctx.body = {
       msg: '用户名已存在',
@@ -88,7 +88,7 @@ router.post('/register', async ctx => {
     const newUser = new User({
       username: ctx.request.body.username,
       password: en_data_passwd,
-      registertime:new Date()
+      registertime: new Date()
     })
     await newUser.save().then(user => {
       ctx.body = {

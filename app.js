@@ -70,6 +70,16 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+app.use(async(ctx, next)=>{
+  return next().catch((err) => {
+    if (401 == err.status) {
+        ctx.status = 401;
+        ctx.body = {code:401,msg:'token验证失败',success:false,data:null};
+    } else {
+        throw err;
+    }
+});
+});
 // 验证jsonwebtoken是否过期的中间件，在login接口后面执行，除了login接口的请求外，其他接口都需要验证token
 app.use(koajwt({
   secret: 'secret'
@@ -88,24 +98,9 @@ app.use(system.routes(),system.allowedMethods());
 app.use(qiniuToken.routes(),qiniuToken.allowedMethods());
 
 
-
-app.use(async(ctx, next)=>{
-  return next().catch((err) => {
-      if (401 == err.status) {
-        ctx.status = 401;
-          ctx.body = {
-              status:401,
-              msg:'登录过期，请重新登录'
-          }
-      } else {
-          throw err;
-      }
-  });
-});
-
 // error-handling
 app.on('error', (err, ctx) => {
- 
+    
   console.error('server error', err, ctx)
 });
 
