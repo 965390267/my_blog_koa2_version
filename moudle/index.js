@@ -2,7 +2,7 @@
 //这儿创建链接数据库的方法以及定义数据库的模型，模式
 const mongoose = require('mongoose');
 // 连接数据库 如果不自己创建 默认test数据库会自动生成
-// var dbOptions = {'user':'zangzhihong','pass':'zang2238668'};
+ var dbOptions = {'user':'zangzhihong','pass':'zang2238668'};
  mongoose.connect('mongodb://47.97.123.194/blog',{ useNewUrlParser: true });
 //mongoose.connect('mongodb://localhost:27017/blog',{ useNewUrlParser: true });
 
