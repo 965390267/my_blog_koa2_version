@@ -24,9 +24,9 @@ router.get('/client/photo', async (ctx, next) => {
         })
     })
     await p.then(res => {
-        return ctx.body = { code: 200, success: true, msg: '获取图片列表成功', data: res };
+         ctx.body = { code: 200, success: true, msg: '获取图片列表成功', data: res };
     }).catch(err => {
-        return ctx.body = { code: 404, success: false, msg: '获取图片列表失败', data: err };
+         ctx.body = { code: 404, success: false, msg: '获取图片列表失败', data: err };
     })
 })
 router.post('/uploadphoto', async ctx => {

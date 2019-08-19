@@ -6,9 +6,7 @@ router.prefix('/api');
 router.post('/postweiyu', async ctx => {
     var newweiyu = new Weiyu({
         weiyu: ctx.request.body.weiyu,
-        time: ctx.request.body.time,
-        headimg: ctx.request.body.headimg,
-        timenumber: new Date(ctx.request.body.time).getTime()
+        headimg: ctx.request.body.headimg
     })
     let result = await newweiyu.save();
     if (result) {
@@ -18,18 +16,27 @@ router.post('/postweiyu', async ctx => {
     }
 })
 
-router.get('/client/getweiyu', async ctx => { //获取微语的接口
-    let result = await Weiyu.find().sort({ timenumber: -1 });
+router.post('/client/getweiyu', async ctx => { //获取微语的接口
+    let pageSize = ctx.request.body.pageSize; //一页多少条
+    let currentPage = ctx.request.body.currentPage;  //当前第几页
+    let skipnum = (currentPage - 1) * pageSize;   //跳过数
+
+    let result = await Weiyu.find().skip(skipnum).limit(pageSize).sort({time: -1 })
     if (result) {
-        ctx.body = { code: 200, success: true, msg: '微语获取成功', data: result };
+        let countResult = await Weiyu.count()
+        if (countResult) {
+            ctx.body = { code: 200, success: true, msg: '微语获取成功', count: countResult, data: result }
+        } else {
+            ctx.body = { code: 404, success: false, msg: '数据库错误', data: result };
+        }
     } else {
-        ctx.body = { code: 404, success: false, msg: '数据库错误', data: result };
+            ctx.body = { code: 404, success: false, msg: '数据库错误', data: result };
     }
 });
 
 router.get('/client/getthreeweiyu', async ctx => { //获取3条微语的接口
 
-    let result = await Weiyu.find().limit(3).sort({ timenumber: -1 })
+    let result = await Weiyu.find().limit(3).sort({ time: -1 })
     if (result) {
         ctx.body = { code: 200, success: true, msg: '微语获取成功', data: result };
     } else {

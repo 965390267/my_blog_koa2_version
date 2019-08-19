@@ -4,13 +4,7 @@ const os = require('os');
 const WebSocket = require('ws');
 
 router.prefix('/api');
-router.get('/systemmessage', async ctx => { //浏览器信息
 
-   let agent = ctx.headers["user-agent"];
-   ctx.body = { code: 200, success: true, msg: '浏览器信息', data: { 'agent': agent, 'loginip': ctx.ip, 'hostname': ctx.host } };// 浏览器信息
-
-
-});
 router.get('/client/recordid', async ctx => { //获取底部备案信息
    let result = await Admin.findOne({
       recordid: ctx.request.body.recordmes
@@ -27,10 +21,10 @@ router.post('/recordid', async ctx => { //提交底部备案信息
    let newrecordid = new Admin({
       recordid: ctx.request.body.tag,
    });
-   let agent = ctx.request.body.name;
+
    // 保存数据newAccount数据进mongoDB
    await newrecordid.save().then(data => {
-      ctx.body = { code: 200, success: true, msg: '备案信息提交成功', data: { 'agent': agent } }// 备案信息提交成功
+      ctx.body = { code: 200, success: true, msg: '备案信息提交成功', data: data }// 备案信息提交成功
    }).catch(err => {
       ctx.body = { code: 404, success: false, msg: '数据库错误' + err };
    })
@@ -38,10 +32,6 @@ router.post('/recordid', async ctx => { //提交底部备案信息
 
 });
 
-// router.get('/client/servermessage', async ctx => { //获取底部备案信息
-
-//    ctx.body = { code: 200, success: true, msg: '获取服务器信息成功', data: system };// 获取备案信息成功        
-// });
 
 
 function getSystemMessage() {
